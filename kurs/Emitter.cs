@@ -13,6 +13,11 @@ namespace kurs
         public int MousePositionX;
         public int MousePositionY;
 
+        public float GravitationX = 0;
+        public float GravitationY = 0; // пусть гравитация будет силой один пиксель за такт, нам хватит
+
+        public List<Point> gravityPoints = new List<Point>(); // тут буду хранится точки притяжения
+
         public void UpdateState()
         {
             foreach (var particle in particles)
@@ -46,6 +51,26 @@ namespace kurs
                     particle.X += (float)(particle.Speed * Math.Cos(directionInRadians));
                     particle.Y -= (float)(particle.Speed * Math.Sin(directionInRadians));
                     */
+                    foreach (var point in gravityPoints)
+                    {
+                        // сделаем сначала для одной точки
+                        // и так считаем вектор притяжения к точке
+                        float gX = gravityPoints[0].X - particle.X;
+                        float gY = gravityPoints[0].Y - particle.Y;
+
+                        // считаем квадрат расстояния между частицей и точкой r^2
+                        float r2 = (float)Math.Max(100, gX * gX + gY * gY);
+                        float M = 100; // сила притяжения к точке, пусть 100 будет
+
+                        // пересчитываем вектор скорости с учетом притяжения к точке
+                        particle.SpeedX += (gX) * M / r2;
+                        particle.SpeedY += (gY) * M / r2;
+                    }
+
+                    // гравитация воздействует на вектор скорости, поэтому пересчитываем его
+                    particle.SpeedX += GravitationX;
+                    particle.SpeedY += GravitationY;
+
                     particle.X += particle.SpeedX;
                     particle.Y += particle.SpeedY;
                 }
@@ -77,6 +102,16 @@ namespace kurs
             foreach (var particle in particles)
             {
                 particle.Draw(g);
+            }
+            foreach (var point in gravityPoints)
+            {
+                g.FillEllipse(
+                    new SolidBrush(Color.Red),
+                    point.X - 5,
+                    point.Y - 5,
+                    10,
+                    10
+                );
             }
         }
     }
