@@ -9,6 +9,23 @@ namespace kurs
 {
     class Emitter
     {
+        public int X; // координата X центра эмиттера, будем ее использовать вместо MousePositionX
+        public int Y; // соответствующая координата Y 
+        public int Direction = 0; // вектор направления в градусах куда сыпет эмиттер
+        public int Spreading = 360; // разброс частиц относительно Direction
+        public int SpeedMin = 1; // начальная минимальная скорость движения частицы
+        public int SpeedMax = 10; // начальная максимальная скорость движения частицы
+        public int RadiusMin = 2; // минимальный радиус частицы
+        public int RadiusMax = 10; // максимальный радиус частицы
+        public int LifeMin = 20; // минимальное время жизни частицы
+        public int LifeMax = 100; // максимальное время жизни частицы
+
+        public int ParticlesPerTick = 1; // добавил новое поле
+
+        public Color ColorFrom = Color.White; // начальный цвет частицы
+        public Color ColorTo = Color.FromArgb(0, Color.Black); // конечный цвет частиц
+
+
         List<Particle> particles = new List<Particle>();
         public int MousePositionX;
         public int MousePositionY;
@@ -16,16 +33,33 @@ namespace kurs
         public float GravitationX = 0;
         public float GravitationY = 0; // пусть гравитация будет силой один пиксель за такт, нам хватит
 
-        public List<Point> gravityPoints = new List<Point>(); // тут буду хранится точки притяжения
+        public List<IImpactPoint> impactPoints = new List<IImpactPoint>(); // тут буду хранится точки притяжения
+
+        public virtual Particle CreateParticle()
+        {
+            var particle = new ParticleColorful();
+            particle.FromColor = ColorFrom;
+            particle.ToColor = ColorTo;
+
+            return particle;
+        }
 
         public void UpdateState()
         {
+            int particlesToCreate = ParticlesPerTick; // фиксируем счетчик сколько частиц нам создавать за тик
+
             foreach (var particle in particles)
             {
                 particle.Life -= 1; // уменьшаю здоровье
                                     // если здоровье кончилось
                 if (particle.Life < 0)
                 {
+                    if (particlesToCreate > 0)
+                    {
+                        /* у нас как сброс частицы равносилен созданию частицы */
+                        particlesToCreate -= 1; // поэтому уменьшаем счётчик созданных частиц на 1
+                        ResetParticle(particle);
+                    }
                     // восстанавливаю здоровье
                     particle.Life = 20 + Particle.rand.Next(100);
                     // перемещаю частицу в центр
@@ -51,20 +85,9 @@ namespace kurs
                     particle.X += (float)(particle.Speed * Math.Cos(directionInRadians));
                     particle.Y -= (float)(particle.Speed * Math.Sin(directionInRadians));
                     */
-                    foreach (var point in gravityPoints)
+                    foreach (var point in impactPoints)
                     {
-                        // сделаем сначала для одной точки
-                        // и так считаем вектор притяжения к точке
-                        float gX = gravityPoints[0].X - particle.X;
-                        float gY = gravityPoints[0].Y - particle.Y;
-
-                        // считаем квадрат расстояния между частицей и точкой r^2
-                        float r2 = (float)Math.Max(100, gX * gX + gY * gY);
-                        float M = 100; // сила притяжения к точке, пусть 100 будет
-
-                        // пересчитываем вектор скорости с учетом притяжения к точке
-                        particle.SpeedX += (gX) * M / r2;
-                        particle.SpeedY += (gY) * M / r2;
+                        point.ImpactParticle(particle);
                     }
 
                     // гравитация воздействует на вектор скорости, поэтому пересчитываем его
@@ -77,21 +100,12 @@ namespace kurs
             }
             // добавил генерацию частиц
             // генерирую не более 10 штук за тик
-            for (var i = 0; i < 10; ++i)
+            while (particlesToCreate >= 1)
             {
-                if (particles.Count < 500) // пока частиц меньше 500 генерируем новые
-                {
-                    var particle = new ParticleColorful();
-                    particle.FromColor = Color.Yellow;
-                    particle.ToColor = Color.FromArgb(0, Color.Magenta);
-                    particle.X = MousePositionX;
-                    particle.Y = MousePositionY;
-                    particles.Add(particle);
-                }
-                else
-                {
-                    break; // а если частиц уже 500 штук, то ничего не генерирую
-                }
+                particlesToCreate -= 1;
+                var particle = CreateParticle();
+                ResetParticle(particle);
+                particles.Add(particle);
             }
         }
 
@@ -103,16 +117,28 @@ namespace kurs
             {
                 particle.Draw(g);
             }
-            foreach (var point in gravityPoints)
+            foreach (var point in impactPoints)
             {
-                g.FillEllipse(
-                    new SolidBrush(Color.Red),
-                    point.X - 5,
-                    point.Y - 5,
-                    10,
-                    10
-                );
+                point.Render(g);
             }
+        }
+        public virtual void ResetParticle(Particle particle)
+        {
+            particle.Life = Particle.rand.Next(LifeMin, LifeMax);
+
+            particle.X = X;
+            particle.Y = Y;
+
+            var direction = Direction
+                + (double)Particle.rand.Next(Spreading)
+                - Spreading / 2;
+
+            var speed = Particle.rand.Next(SpeedMin, SpeedMax);
+
+            particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
+            particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+
+            particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
         }
     }
 }

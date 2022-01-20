@@ -13,23 +13,48 @@ namespace kurs
     public partial class Form1 : Form
     {
         List<Particle> particles = new List<Particle>();
-        Emitter emitter = new Emitter(); // добавили эмиттер
+        List<Emitter> emitters = new List<Emitter>();
+        Emitter emitter; // добавим поле для эмиттера
         public Form1()
         {
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
-            emitter.gravityPoints.Add(new Point(
-            picDisplay.Width / 2, picDisplay.Height / 2
-        ));
-            // добавил еще две        
-            emitter.gravityPoints.Add(new Point(
-              (int)(picDisplay.Width * 0.75), picDisplay.Height / 2
-           ));
+            this.emitter = new Emitter // создаю эмиттер и привязываю его к полю emitter
+            {
+                Direction = 0,
+                Spreading = 10,
+                SpeedMin = 10,
+                SpeedMax = 10,
+                ColorFrom = Color.Gold,
+                ColorTo = Color.FromArgb(0, Color.Red),
+                ParticlesPerTick = 10,
+                X = picDisplay.Width / 2,
+                Y = picDisplay.Height / 2,
+            };
 
-            emitter.gravityPoints.Add(new Point(
-               (int)(picDisplay.Width * 0.25), picDisplay.Height / 2
-           ));
+            emitters.Add(this.emitter); // все равно добавляю в список emitters, чтобы он рендерился и обновлялся
+            /*
+            // гравитон
+            emitter.impactPoints.Add(new GravityPoint
+            {
+                X = (float)(picDisplay.Width * 0.25),
+                Y = picDisplay.Height / 2
+            });
+
+            // в центре антигравитон
+            emitter.impactPoints.Add(new AntiGravityPoint
+            {
+                X = picDisplay.Width / 2,
+                Y = picDisplay.Height / 2
+            });
+
+            // снова гравитон
+            emitter.impactPoints.Add(new GravityPoint
+            {
+                X = (float)(picDisplay.Width * 0.75),
+                Y = picDisplay.Height / 2
+            }); */
 
         }
         private void timer1_Tick(object sender, EventArgs e)
