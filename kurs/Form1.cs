@@ -44,31 +44,7 @@ namespace kurs
                 particle.FromColor = emitter.ColorFrom;
                 particle.ToColor = emitter.ColorTo;
             };
-
             emitter.impactPoints.Add(collector);
-            //emitters.Add(this.emitter); // все равно добавляю в список emitters, чтобы он рендерился и обновлялся
-            /*
-            // гравитон
-            emitter.impactPoints.Add(new GravityPoint
-            {
-                X = (float)(picDisplay.Width * 0.25),
-                Y = picDisplay.Height / 2
-            });
-
-            // в центре антигравитон
-            emitter.impactPoints.Add(new AntiGravityPoint
-            {
-                X = picDisplay.Width / 2,
-                Y = picDisplay.Height / 2
-            });
-
-            // снова гравитон
-            emitter.impactPoints.Add(new GravityPoint
-            {
-                X = (float)(picDisplay.Width * 0.75),
-                Y = picDisplay.Height / 2
-            }); */
-
         }
 
         private void UpdateCounters()
@@ -165,6 +141,11 @@ namespace kurs
                     color = Color.FromArgb(random.Next(255), random.Next(255), random.Next(255)),
                 };
                 emitter.impactPoints.Add(counter);
+                emitter.impactPoints.Add(new GravityPoint
+                {
+                    X = e.X,
+                    Y = e.Y,
+                });
                 UpdateCounters();
             }
             else if (e.Button == MouseButtons.Right)
@@ -179,6 +160,36 @@ namespace kurs
                         }
                     }
                 }
+                foreach (var impactPoints in emitter.impactPoints.ToList())
+                {
+                    if (impactPoints is GravityPoint gravityPoint)
+                    {
+                        if (gravityPoint.Power / 2 >= Math.Sqrt(Math.Pow(e.X - gravityPoint.X, 2) + Math.Pow(e.Y - gravityPoint.Y, 2)))
+                        {
+                            emitter.impactPoints.Remove(gravityPoint);
+                        }
+                    }
+                }
+                foreach (var impactPoints in emitter.impactPoints.ToList())
+                {
+                    if (impactPoints is AntiGravityPoint antiGravityPoint)
+                    {
+                        if (antiGravityPoint.Power / 2 >= Math.Sqrt(Math.Pow(e.X - antiGravityPoint.X, 2) + Math.Pow(e.Y - antiGravityPoint.Y, 2)))
+                        {
+                            emitter.impactPoints.Remove(antiGravityPoint);
+                        }
+                    }
+                }
+                UpdateCounters();
+            }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                emitter.impactPoints.Add(new AntiGravityPoint
+                {
+                    X = e.X,
+                    Y = e.Y,
+                });
+
                 UpdateCounters();
             }
         }
@@ -187,5 +198,6 @@ namespace kurs
         {
             ParticleColorful.size = trackBar1.Value;
         }
+
     }
 }

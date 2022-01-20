@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 namespace kurs
-{/*
+{
     class GravityPoint : IImpactPoint
     {
         public int Power = 100; // сила притяжения
@@ -20,5 +20,5 @@ namespace kurs
             particle.SpeedX += gX * Power / r2;
             particle.SpeedY += gY * Power / r2;
         }
-    }*/
+    }
 }

@@ -213,17 +213,17 @@ namespace kurs
             // 
             this.btfromColor.Location = new System.Drawing.Point(796, 439);
             this.btfromColor.Name = "btfromColor";
-            this.btfromColor.Size = new System.Drawing.Size(75, 23);
+            this.btfromColor.Size = new System.Drawing.Size(119, 23);
             this.btfromColor.TabIndex = 14;
-            this.btfromColor.Text = "нач цвет";
+            this.btfromColor.Text = "Начальный цвет";
             this.btfromColor.UseVisualStyleBackColor = true;
             this.btfromColor.Click += new System.EventHandler(this.btfromColor_Click);
             // 
             // bttoColor
             // 
-            this.bttoColor.Location = new System.Drawing.Point(975, 439);
+            this.bttoColor.Location = new System.Drawing.Point(937, 439);
             this.bttoColor.Name = "bttoColor";
-            this.bttoColor.Size = new System.Drawing.Size(75, 23);
+            this.bttoColor.Size = new System.Drawing.Size(113, 23);
             this.bttoColor.TabIndex = 15;
             this.bttoColor.Text = "Конечный цвет";
             this.bttoColor.UseVisualStyleBackColor = true;
