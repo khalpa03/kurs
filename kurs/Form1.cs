@@ -37,14 +37,12 @@ namespace kurs
             {
                 particle.FromColor = collector.color;
                 particle.ToColor = collector.color;
-                particle.Cross = true;
             };
 
             collector.ReturnColor += (particle) =>
             {
                 particle.FromColor = emitter.ColorFrom;
                 particle.ToColor = emitter.ColorTo;
-                particle.Cross = false;
             };
 
             emitter.impactPoints.Add(collector);
@@ -123,7 +121,7 @@ namespace kurs
 
         private void tbGravitation_Scroll(object sender, EventArgs e)
         {
-
+            emitter.GravitationY = tbGravitation.Value;
         }
 
         private void tbParticles_Scroll(object sender, EventArgs e)
@@ -183,6 +181,11 @@ namespace kurs
                 }
                 UpdateCounters();
             }
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            ParticleColorful.size = trackBar1.Value;
         }
     }
 }

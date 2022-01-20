@@ -34,6 +34,30 @@ namespace kurs
 
         public List<IImpactPoint> impactPoints = new List<IImpactPoint>(); // тут буду хранится точки притяжения
 
+        public virtual void ResetParticle(Particle particle)
+        {
+            if (particle is ParticleColorful particleColor)
+            {
+                particleColor.FromColor = ColorFrom;
+                particleColor.ToColor = ColorTo;
+            }
+            particle.Life = Particle.rand.Next(LifeMin, LifeMax);
+
+            particle.X = X;
+            particle.Y = Y;
+
+            var direction = Direction
+                + (double)Particle.rand.Next(Spreading)
+                - Spreading / 2;
+
+
+            var speed = Particle.rand.Next(SpeedMax);
+
+            particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
+            particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+
+            particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
+        }
         public virtual Particle CreateParticle()
         {
             var particle = new ParticleColorful();
@@ -53,8 +77,8 @@ namespace kurs
 
                 if (particle.Life <= 0)
                 {
-                    if (particlesToCreate > 0)
-                        particles.Remove(particle);
+                    if (particlesToCreate > 1)
+                    particles.Remove(particle); 
                 }
                 else
                 {
@@ -94,30 +118,6 @@ namespace kurs
                 point.Render(g);
             }
         }
-        public virtual void ResetParticle(Particle particle)
-        {
-            Random rand = new Random();
-            if (particle is ParticleColorful particleColor)
-            {
-                particleColor.FromColor = ColorFrom;
-                particleColor.ToColor = ColorTo;
-            }
-            particle.Life = rand.Next(LifeMin, LifeMax);
-
-            particle.X = X;
-            particle.Y = Y;
-
-            var direction = Direction
-                + (double)rand.Next(Spreading)
-                - Spreading / 2;
-
-
-            var speed = rand.Next(SpeedMin, SpeedMax);
-
-            particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
-            particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
-
-            particle.Radius = rand.Next(RadiusMin, RadiusMax);
-        }
+        
     }
 }

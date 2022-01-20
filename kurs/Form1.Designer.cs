@@ -50,6 +50,8 @@ namespace kurs
             this.colorDialog3 = new System.Windows.Forms.ColorDialog();
             this.btfromColor = new System.Windows.Forms.Button();
             this.bttoColor = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDirection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbSpreading)).BeginInit();
@@ -57,6 +59,7 @@ namespace kurs
             ((System.ComponentModel.ISupportInitialize)(this.tbGravitation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbParticles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbLife)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // picDisplay
@@ -72,7 +75,7 @@ namespace kurs
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 15;
+            this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label1
@@ -158,7 +161,6 @@ namespace kurs
             // tbGravitation
             // 
             this.tbGravitation.Location = new System.Drawing.Point(796, 239);
-            this.tbGravitation.Maximum = 1;
             this.tbGravitation.Name = "tbGravitation";
             this.tbGravitation.Size = new System.Drawing.Size(257, 45);
             this.tbGravitation.TabIndex = 9;
@@ -209,7 +211,7 @@ namespace kurs
             // 
             // btfromColor
             // 
-            this.btfromColor.Location = new System.Drawing.Point(821, 379);
+            this.btfromColor.Location = new System.Drawing.Point(796, 439);
             this.btfromColor.Name = "btfromColor";
             this.btfromColor.Size = new System.Drawing.Size(75, 23);
             this.btfromColor.TabIndex = 14;
@@ -219,7 +221,7 @@ namespace kurs
             // 
             // bttoColor
             // 
-            this.bttoColor.Location = new System.Drawing.Point(910, 439);
+            this.bttoColor.Location = new System.Drawing.Point(975, 439);
             this.bttoColor.Name = "bttoColor";
             this.bttoColor.Size = new System.Drawing.Size(75, 23);
             this.bttoColor.TabIndex = 15;
@@ -227,11 +229,35 @@ namespace kurs
             this.bttoColor.UseVisualStyleBackColor = true;
             this.bttoColor.Click += new System.EventHandler(this.bttoColor_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(796, 370);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(107, 16);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Размер частиц";
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(796, 392);
+            this.trackBar1.Maximum = 5;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(257, 45);
+            this.trackBar1.TabIndex = 17;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar1.Value = 1;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1062, 474);
+            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.bttoColor);
             this.Controls.Add(this.btfromColor);
             this.Controls.Add(this.tbLife);
@@ -257,6 +283,7 @@ namespace kurs
             ((System.ComponentModel.ISupportInitialize)(this.tbGravitation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbParticles)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbLife)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,6 +311,8 @@ namespace kurs
         private System.Windows.Forms.ColorDialog colorDialog3;
         private System.Windows.Forms.Button btfromColor;
         private System.Windows.Forms.Button bttoColor;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }
 
