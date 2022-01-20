@@ -65,6 +65,9 @@ namespace kurs
         // два новых поля под цвет начальный и конечный
         public Color FromColor;
         public Color ToColor;
+        public bool Cross = false;
+
+        public static Bitmap cross = new Bitmap(Properties.Resources.cross);
 
         // для смеси цветов
         public static Color MixColor(Color color1, Color color2, float k)
@@ -80,15 +83,22 @@ namespace kurs
         // ну и отрисовку перепишем
         public override void Draw(Graphics g)
         {
-            float k = Math.Min(1f, Life / 100);
+            if (!Cross)
+            {
+                float k = Math.Min(1f, Math.Abs(Life / 100));
 
-            // так как k уменьшается от 1 до 0, то порядок цветов обратный
-            var color = MixColor(ToColor, FromColor, k);
-            var b = new SolidBrush(color);
+                var color = MixColor(ToColor, FromColor, k);
+                var b = new SolidBrush(color);
 
-            g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
+                g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
 
-            b.Dispose();
+                b.Dispose();
+            }
+            else
+            {
+                Bitmap particle = new Bitmap(cross, new Size(Radius * 2, Radius * 2));
+                g.DrawImage(particle, new Point(Convert.ToInt32(X - Radius), Convert.ToInt32(Y - Radius)));
+            }
         }
     }
 }
